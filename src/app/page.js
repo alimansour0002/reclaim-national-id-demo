@@ -3,53 +3,87 @@
 import { useState, useEffect, useRef } from 'react';
 
 import QRCode from "react-qr-code";
-import Confetti from 'react-confetti'
-import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti';
+import useWindowSize from 'react-use/lib/useWindowSize';
 import { Reclaim } from '@reclaimprotocol/js-sdk';
-import { data } from 'autoprefixer';
+import { providers } from './constants.js';
+import Select from 'react-select';
+const CustomOption = ({ innerRef, innerProps, data }) => (
+  <div
+    ref={innerRef}
+    {...innerProps}
+    style={{ display: 'flex', alignItems: 'center', padding: '10px', background: '#f0f0f0' }}
+  >
+    <img src={data.image} alt={data.label} style={{ width: 20, height: 20, marginRight: 10 }} />
+    {data.label}
+  </div>
+);
+const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    backgroundColor: 'black',
+    color: 'grey',
+    // width: '100%',
+    border: 'none',
+    margin: '-15px',
+    boxShadow: 'none',
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: 'grey',
+  }),
+  menu: (provided) => ({
+    ...provided,
+    backgroundColor: 'black',
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isSelected ? 'grey' : state.isFocused ? 'lightgrey' : 'black',
+    color: 'grey',
+    ':active': {
+      backgroundColor: 'grey',
+    },
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: 'grey',
+  }),
+};
+const CustomSelect = ({ options, placeholder, onChange }) => (
+  <Select
+    className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm md:text-base text-black bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+    options={options}
+    placeholder={placeholder}
+    components={{ Option: CustomOption }}
+    onChange={onChange}
+    styles={customStyles}
 
+  />
+);
 const APP_ID = process.env.NEXT_PUBLIC_APP_ID
 const APP_SECRET = process.env.NEXT_PUBLIC_APP_SECRET
-
-const providers = [
-  { name: "Aadhaar Card Date of Birth", providerId: '5e1302ca-a3dd-4ef8-bc25-24fcc97dc800' },
-  { name: "Alaska Airlines Miles", providerId: 'f1ecc692-cf13-4f45-9b91-ea1459875f07' },
-  { name: "Coinbase Completed KYC", providerId: '285a345c-c6a6-4b9f-9e1e-23432082c0a8' },
-  { name: "Kaggle username", providerId: 'c94476a0-8a75-4563-b70a-bf6124d7c59b' },
-  { name: "Hugging Face username dbg", providerId: 'aaa47198-2523-40da-b9a9-bfa290730d52' },
-  { name: "Swiggy Last Order Address", providerId: '49e2e77c-1921-4c0a-bd8f-f14092d7e516' },
-  { name: "Swiggy Addressbook", providerId: 'eeaa0f1a-d7ae-4fe1-a382-36119326cc17' },
-  { name: "Swiggy Last 3 delivery Address", providerId: '4800d18c-59c7-48af-94c5-bc53f8c6db6e' },
-  { name: "Binance KYC Level", providerId: '2b22db5c-78d9-4d82-84f0-a9e0a4ed0470' },
-  { name: "OKX KYC level", providerId: '6de34e9f-06b0-4974-8ab3-93623c783078' },
-  { name: "Atleast one Uber Ride", providerId: '55535317-71ad-4cac-9a38-22652e64be9e' },
-  { name: "Aadhaar Anon", providerId: '5c1738b0-0fa6-49d7-86be-d5fa28cc02a5' },
-  { name: "Networth Via smallcase", providerId: 'b038f282-95ec-4553-9131-584be48dda78' },
-  { name: "Groww - Verified KYC", providerId: "8a7f0989-c4d9-4528-ac82-a46abaa3c564" }
-];
-
-
-
-
+const obj = {
+  "identifier": "0xeb2e99018ae30e7de8b5828dc1571689459393ada55fc91bd173642328dd3074",
+  "claimData": {
+      "provider": "http",
+      "parameters": "{\"body\":\"\",\"geoLocation\":\"in\",\"method\":\"GET\",\"paramValues\":{\"CLAIM_DATA\":\"76561199601812329\"},\"responseMatches\":[{\"type\":\"contains\",\"value\":\"_steamid\\\">Steam ID: {{CLAIM_DATA}}</div>\"}],\"responseRedactions\":[{\"jsonPath\":\"\",\"regex\":\"_steamid\\\">Steam ID: (.*)</div>\",\"xPath\":\"id(\\\"responsive_page_template_content\\\")/div[@class=\\\"page_header_ctn\\\"]/div[@class=\\\"page_content\\\"]/div[@class=\\\"youraccount_steamid\\\"]\"}],\"url\":\"https://store.steampowered.com/account/\"}",
+      "owner": "0x19034ebccb48bfeaf1b5fb91e0b9f20361261ed0",
+      "timestampS": 1717326562,
+      "context": "{\"contextAddress\":\"0x0\",\"contextMessage\":\"\",\"extractedParameters\":{\"CLAIM_DATA\":\"76561199601812329\"},\"providerHash\":\"0x5f5312e27124dc7605f70a7d884e169049679b93f91c137b4d18a8569d825900\"}",
+      "identifier": "0xeb2e99018ae30e7de8b5828dc1571689459393ada55fc91bd173642328dd3074",
+      "epoch": 1
+  },
+  "signatures": [
+      "0x0bef3a81d99f09d84de07fce2e4a43fa069754088c5480c87b3ad8470a56bf1a0018390f9c7a9caeaefdc405d072fc61f6b02848e83203b8a4a7366e799f935b1b"
+  ],
+  "witnesses": [
+      {
+          "id": "0x244897572368eadf65bfbc5aec98d8e5443a9072",
+          "url": "https://reclaim-node.questbook.app"
+      }
+  ]
+};
 export default function Home() {
-  console.log(`
-  _    _                              _     _      _             _ 
- | |  | |                            | |   (_)    (_)           | |
- | |  | | ___      __ _ _ __ ___     | |__  _ _ __ _ _ __   __ _| |
- | |/\\| |/ _ \\    / _\` | '__/ _ \\    | '_ \\| | '__| | '_ \\ / _\` | |
- \\  /\\  /  __/   | (_| | | |  __/    | | | | | |  | | | | | (_| |_|
-  \\/  \\/ \\___|    \\__,_|_|  \\___|    |_| |_|_|_|  |_|_| |_|\\__, (_)
-                                                            __/ |  
-                                                           |___/   
- 
-If you are here, we're hiring hackers like you - integration engineering. 
-You will be looking at chrome devtools and building reclaim providers
- 
-Apply :
-https://x.com/madhavanmalolan/status/1792949714813419792
-`);
-
-
   const [url, setUrl] = useState('')
   const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [showQR, setShowQR] = useState(false)
@@ -76,7 +110,7 @@ https://x.com/madhavanmalolan/status/1792949714813419792
       await navigator.clipboard.writeText(url);
       setIsCopied(true);
       console.log('Link copied to clipboard');
-    } catch(err) {
+    } catch (err) {
       console.error('Failed to copy link: ', err);
     }
   };
@@ -109,7 +143,7 @@ https://x.com/madhavanmalolan/status/1792949714813419792
           console.log('error', error)
         }
       })
-    } catch(error) {
+    } catch (error) {
       console.error('Error in getVerificationReq', error)
       // Handle error gracefully, e.g., show a notification to the user
       // and possibly revert UI changes made before the error occurred
@@ -129,7 +163,7 @@ https://x.com/madhavanmalolan/status/1792949714813419792
 
     let isMobileDevice = regexp.test(details);
 
-    if(isMobileDevice) {
+    if (isMobileDevice) {
       setIsMobileDevice(true)
     } else {
       setIsMobileDevice(false)
@@ -139,7 +173,7 @@ https://x.com/madhavanmalolan/status/1792949714813419792
 
 
   useEffect(() => {
-    if(proofs) {
+    if (proofs) {
       setShowConfetti(true);
       setTimeout(() => {
         setShowConfetti(false);
@@ -150,30 +184,22 @@ https://x.com/madhavanmalolan/status/1792949714813419792
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8 mt-8 gap-4 bg-black">
       <div className="z-10 w-full flex flex-col gap-4 items-center justify-center font-mono text-sm">
-        <h2 className="text-slate-300 text-sm lg:text-4xl md:text-3xl sm:text-xl xs:text-xs text-nowrap">Welcome to Reclaim Protocol Demo</h2>
-        <h4 className="text-slate-400 text-sm lg:text-xl md:text-lg sm:text-lg xs:text-xs">This demo uses <span className="text-slate-300 underline"><a href='https://www.npmjs.com/package/@reclaimprotocol/js-sdk'> @reclaimprotocol/js-sdk </a></span> to generate proofs of your web2 data</h4>
-        <p className='text-slate-500'>Proofs generated by Reclaim Protocol are secure and private. <span className="text-slate-300 underline"><a href='https://blog.reclaimprotocol.org/posts/chacha-circuit-audit/'>Learn More</a></span></p>
-        <select
-          value={selectedProviderId}
-          onChange={(e) => {
-            setSelectedProviderId(e.target.value);
-            setShowQR(false);
-            setShowButton(false);
-            handleButtonClick(e.target.value);
-          }}
-          className="w-full sm:w-auto px-3 py-2 text-xs sm:text-sm md:text-base text-black bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="" disabled>Select a proof you want to generate today</option>
-          {myProviders.map((provider) => (
-            <option key={provider.providerId} value={provider.providerId}>
-              {provider.name}
-            </option>
-          ))}
-        </select>
-
-        {/* {showButton && (<button className="bg-blue-500 mt-8 hover:bg-blue-700 lg:text-lg md:text-base sm:text-lg text-gray-200 font-semibold py-2 px-4 rounded"
-          onClick={handleButtonClick}
-        >Generate Proof Of Ownership Of  </button>)} */}
+        <h2 className="text-slate-300 text-sm lg:text-4xl md:text-3xl sm:text-xl xs:text-xs text-nowrap">Reclaim National ID Attestation Demo</h2>
+        <h2 >Generate a ZKP (Cryptographic) attestation of your national ID by logging into your national e-government portal</h2>
+        <p className='text-slate-500'>This demo uses @reclaimprotocol/js-sdk to generate proofs of your web2 data</p>
+        <p> Proofs generated by Reclaim Protocol are secure and private <span className="text-slate-300 underline"><a href='https://blog.reclaimprotocol.org/posts/chacha-circuit-audit/'>Learn More</a></span></p>
+        <CustomSelect onChange={(e) => {
+          setSelectedProviderId(e.value);
+          setShowQR(false);
+          setShowButton(false);
+          handleButtonClick(e.value);
+        }} options={myProviders.map((provider) => (
+          {
+            value: provider.providerId,
+            label: provider.name,
+            image: provider.image,
+          }
+        ))} placeholder="Select a proof you want to generate today" />
 
         {isLoaded && (<>
           <div role="status" className='mt-10'>
@@ -215,8 +241,7 @@ https://x.com/madhavanmalolan/status/1792949714813419792
             <>
               <h3 className="text-slate-300 text-sm lg:text-2xl md:text-xl sm:text-lg xs:text-xs mt-8">Proofs Received</h3>
               <div style={{ maxWidth: '1000px' }}>
-                <p> {JSON.stringify(proofs?.claimData)}</p>
-
+                <p> {JSON.stringify(JSON.parse(obj?.claimData.context).extractedParameters)}</p>
               </div>
 
               {showConfetti && (
@@ -233,16 +258,3 @@ https://x.com/madhavanmalolan/status/1792949714813419792
     </main>
   );
 }
-
-
-
-// const objKeys = Object.keys(proof.extractedParameterValues)
-// const objValues = Object.values(proof.extractedParameterValues)
-// return (
-//   <div key={index} className="flex flex-col gap-2 text-wrap justify-center items-center">
-//     <pre className='text-wrap text-slate-400'>{objKeys.map((key, index) => {
-//       return `${key}: ${objValues[index]}`
-//     }).join('\n')}</pre>
-//     {/* <code className='whitespace-pre-wrap'>{JSON.stringify(proof, null, 2)}</code> */}
-//   </div>
-// )
