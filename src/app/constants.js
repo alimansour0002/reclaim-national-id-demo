@@ -5,5 +5,6 @@ export const providers = [
     { name: "Uzbekistan", providerId: 'f483cd1c-21d3-480e-a1c4-f43c11a064c5',image:"Uzbekistan.png" },
     { name: "Netherlands", providerId: "a60430bc-e8c3-426b-be20-d41ab5a99336",image:"Netherlands.webp" },
     { name: "UAE Dubailand", providerId: "974dece8-f558-486c-82ed-2a291caab08b",image:"UAE.png" },
+    { name: "Portugal", providerId: "b67c8c94-a0e8-4a13-b6dc-da02b48e2ed4",image:"portugal.webp" },
     // {name:"steamId",providerId:"1bba104c-f7e3-4b58-8b42-f8c0346cdeab",image:"steam.png"}
 ];

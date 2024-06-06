@@ -14,7 +14,7 @@ const CustomOption = ({ innerRef, innerProps, data }) => (
     {...innerProps}
     style={{ display: 'flex', alignItems: 'center', padding: '10px', background: '#f0f0f0' }}
   >
-    <img src={data.image} alt={data.label} style={{ width: 20, height: 20, marginRight: 10 }} />
+    <img src={data.image} alt={data.label} style={{ width: 30, height: 20, marginRight: 10 }} />
     {data.label}
   </div>
 );
