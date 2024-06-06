@@ -62,27 +62,6 @@ const CustomSelect = ({ options, placeholder, onChange }) => (
 );
 const APP_ID = process.env.NEXT_PUBLIC_APP_ID
 const APP_SECRET = process.env.NEXT_PUBLIC_APP_SECRET
-const obj = {
-  "identifier": "0xeb2e99018ae30e7de8b5828dc1571689459393ada55fc91bd173642328dd3074",
-  "claimData": {
-      "provider": "http",
-      "parameters": "{\"body\":\"\",\"geoLocation\":\"in\",\"method\":\"GET\",\"paramValues\":{\"CLAIM_DATA\":\"76561199601812329\"},\"responseMatches\":[{\"type\":\"contains\",\"value\":\"_steamid\\\">Steam ID: {{CLAIM_DATA}}</div>\"}],\"responseRedactions\":[{\"jsonPath\":\"\",\"regex\":\"_steamid\\\">Steam ID: (.*)</div>\",\"xPath\":\"id(\\\"responsive_page_template_content\\\")/div[@class=\\\"page_header_ctn\\\"]/div[@class=\\\"page_content\\\"]/div[@class=\\\"youraccount_steamid\\\"]\"}],\"url\":\"https://store.steampowered.com/account/\"}",
-      "owner": "0x19034ebccb48bfeaf1b5fb91e0b9f20361261ed0",
-      "timestampS": 1717326562,
-      "context": "{\"contextAddress\":\"0x0\",\"contextMessage\":\"\",\"extractedParameters\":{\"CLAIM_DATA\":\"76561199601812329\"},\"providerHash\":\"0x5f5312e27124dc7605f70a7d884e169049679b93f91c137b4d18a8569d825900\"}",
-      "identifier": "0xeb2e99018ae30e7de8b5828dc1571689459393ada55fc91bd173642328dd3074",
-      "epoch": 1
-  },
-  "signatures": [
-      "0x0bef3a81d99f09d84de07fce2e4a43fa069754088c5480c87b3ad8470a56bf1a0018390f9c7a9caeaefdc405d072fc61f6b02848e83203b8a4a7366e799f935b1b"
-  ],
-  "witnesses": [
-      {
-          "id": "0x244897572368eadf65bfbc5aec98d8e5443a9072",
-          "url": "https://reclaim-node.questbook.app"
-      }
-  ]
-};
 export default function Home() {
   const [url, setUrl] = useState('')
   const [isMobileDevice, setIsMobileDevice] = useState(false)
@@ -241,7 +220,7 @@ export default function Home() {
             <>
               <h3 className="text-slate-300 text-sm lg:text-2xl md:text-xl sm:text-lg xs:text-xs mt-8">Proofs Received</h3>
               <div style={{ maxWidth: '1000px' }}>
-                <p> {JSON.stringify(JSON.parse(obj?.claimData.context).extractedParameters)}</p>
+                <p> {JSON.stringify(JSON.parse(proofs?.claimData.context).extractedParameters)}</p>
               </div>
 
               {showConfetti && (
